@@ -125,6 +125,25 @@
   overflow-y: auto; /* 내용이 테두리를 벗어날 경우 스크롤 표시 */
 }
 
+.ct {
+  color: #333;
+  font-size: x-large;
+  animation: ct 6s infinite;
+}
+
+@keyframes ct {
+  10% {color: rgb(223, 24, 24);}
+  20% {color: rgb(243, 132, 5);}
+  30% {color: rgb(199, 241, 9);}
+  40% {color: rgb(77, 247, 10);}
+  50% {color: rgb(7, 239, 247);}
+  60% {color: rgb(1, 17, 243);}
+  70% {color: rgb(147, 15, 255);}
+  80% {color: rgb(245, 10, 147);}
+  90% {color: rgb(99, 3, 31);}
+  100% {color: #011102;}
+}
+
 .board h2 {
   margin-top: 0;
   color: #07510d;
