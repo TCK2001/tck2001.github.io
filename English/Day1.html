@@ -129,6 +129,26 @@
             </dl>
             <p>Difficulty : ⭐⭐ 2/5</p>
         </div>
-    </div> 
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // 문제와 답 목록
+        var problems = [
+          { question: "meet", answer: "만족시키다" },
+          { question: "aspect", answers: ["전반", "측면", "모습"] },
+          { question: "temporarily", answer: "일시적으로 중단 되었다" },
+          { question: "entitle", answer: "자격을 주다" },
+          { question: "compensation", answer: "보상"},
+          { question: "approximately", answer: "대략" }
+        ]; 
+    </script>
+    <h2>문제</h2>
+    <p id="problem"></p>
+    <div class="input-container">
+    <input type="text" id="answer-input" placeholder="답을 입력하세요">
+    <button onclick="checkAnswer()">제출</button>
+    </div>
+    <p id="result"></p>
+    <button onclick="generateProblem()">문제 출제</button>
 </body>
 </html>
