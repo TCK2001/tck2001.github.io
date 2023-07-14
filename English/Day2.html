@@ -134,6 +134,37 @@
             </dl>
             <p>Difficulty : ⭐⭐ 2/5</p>
         </div>
-    </div> 
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // 문제와 답 목록
+        var problems = [
+          { question: "voiced", answer: "표명했다" },
+          { question: "violating", answers: ["어기는", "위반하는"] },
+          { question: "protocol", answer: "협약" },
+          { question: "comply", answer: ["준수하다", "따르다"] },
+          { question: "observe", answer: ["준수하다", "~을 관찰하다"]},
+          { question: "obey", answer: "복종하다" },
+          { question: "fulfill", answer: "충적시키다" },
+          { question: "shift", answer: "근무 시간" },
+          { question: "access", answer: "이용 권한" },
+          { question: "approach", answer:["접근", "접근법"] },
+          { question: "congress", answer: "의회" },
+          { question: "committee", answer: "위원회" },
+          { question: "Fines", answer: "벌금" },
+          { question: "unauthorized reproductuion", answer: "불법 복제" },
+          { question: "abolish", answer: "폐지하다" },
+          { question: "unanimously", answer: "만장일치로" },
+          { question: "legislation", answer: ["법규", "법률"] }
+        ]; 
+    </script>
+    <h2>문제</h2>
+    <p id="problem"></p>
+    <div class="input-container">
+    <input type="text" id="answer-input" placeholder="답을 입력하세요">
+    <button onclick="checkAnswer()">제출</button>
+    </div>
+    <p id="result"></p>
+    <button onclick="generateProblem()">문제 출제</button> 
 </body>
 </html>
