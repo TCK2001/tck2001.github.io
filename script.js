@@ -16,7 +16,9 @@ window.addEventListener('DOMContentLoaded', function() {
       accordion.style.display = 'none';
     }
   }
-var randomProblem;
+  //
+
+  var randomProblem;
 
 // 문제 출제
 function generateProblem() {
@@ -33,16 +35,25 @@ function generateProblem() {
   problemElement.textContent = randomProblem.question;
 }
 
-// 정답 체크
 function checkAnswer() {
   var answerInput = document.getElementById("answer-input").value;
   var resultElement = document.getElementById("result");
-  
-  if (randomProblem.answers.includes(answerInput)) {
-    resultElement.textContent = "정답!";
-  } else {
-    resultElement.textContent = "다시 생각해봐.";
+
+  if (!resultElement) {
+    console.error("결과 요소를 찾을 수 없습니다.");
+    return;
   }
+
+  if (randomProblem && randomProblem.answer) {
+      // console.log("answer ",answerInput)
+      // console.log("result", resultElement.answer)
+      if (randomProblem.answer.includes(answerInput)) {
+        resultElement.textContent = "정답!";
+      } else {
+        resultElement.textContent = "다시 생각해봐.";
+      }
+    }
+
   setTimeout(function() {
     resultElement.textContent = "";
   }, 2000);
