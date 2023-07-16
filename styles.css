@@ -173,6 +173,7 @@
   transform: scale(1.2); /* 확대 효과 조정 */
 }
 
+
 .input-container {
   display: flex;
   align-items: center;
