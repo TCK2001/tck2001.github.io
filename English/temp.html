@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>문제와 답 입력</title>
+</head>
+<body>
+  <h1>문제</h1>
+  <p id="problem"></p>
+  <input type="text" id="answer-input">
+  <button onclick="checkAnswer()">제출</button>
+  <p id="result"></p>
+  <button onclick="generateProblem()">문제 출제</button>
+
+  <script>
+    // 문제와 답 목록
+    
+    var problems = [
+    { question: "T", answer: "T" },
+    { question: "C", answer: "C" },
+    { question: "K", answer: "K" }
+    ];
+
+    // 문제 랜덤 선택
+    var randomProblem;
+
+    // 문제 출제
+    function generateProblem() {
+      // 이전에 출제된 문제와 중복되지 않도록 문제 목록에서 제거
+      var availableProblems = problems.filter(function(problem) {
+        return problem !== randomProblem;
+      });
+
+      // 문제 목록에서 랜덤하게 선택
+      randomProblem = availableProblems[Math.floor(Math.random() * availableProblems.length)];
+
+      // 문제 출력
+      var problemElement = document.getElementById("problem");
+      problemElement.textContent = randomProblem.question;
+    }
+
+    // 정답 체크
+    function checkAnswer() {
+      var answerInput = document.getElementById("answer-input").value;
+      var resultElement = document.getElementById("result");
+
+      if (answerInput === randomProblem.answer) {
+        resultElement.textContent = "정답!";
+      } else {
+        resultElement.textContent = "다시 생각해봐.";
+      }
+    }
+  </script>
+</body>
+</html>
