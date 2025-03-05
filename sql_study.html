@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Study</title>
+    <link rel="stylesheet" href="sql_study.css">
+</head>
+<body>
+    <div class="accordion">
+        <h2 class="main-title">Basic SQL</h2>
+        
+        <!-- SELECT 주제 -->
+        <div class="topic-group">
+            <h3 class="topic-title">SELECT</h3>
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1757. Recyclable and Low Fat Products
+                    <span class="difficulty easy">Easy</span>
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/recyclable-and-low-fat-products/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Basic SELECT statement usage:</p>
+                    <pre><code>select product_id
+from products
+where low_fats = 'Y' and recyclable = 'Y'</code></pre>
+<pre><code>SQL은 항상 (sub query는 예외)
+select ... 
+from ... 
+where ... 
+group by ... 
+order by ... 
+having ... 순서의 형식을 가진다</code></pre>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    584. Find Customer Referee
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/find-customer-referee/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Basic SELECT statement usage:</p>
+                    <pre><code>select name
+from Customer
+where referee_id != 2 or referee_id is null</code></pre>
+<pre><code>SQL에서 <span class="keyword">not equal</span>는 python이랑 똑같음 <span class="keyword">!=</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOIN 주제 -->
+        <div class="topic-group">
+            <h3 class="topic-title">JOIN</h3>
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    Types of Joins
+                    <span class="difficulty hard">Hard</span>
+                </button>
+                <div class="accordion-content">
+                    <p>Different types of SQL joins:</p>
+                    <pre><code>INNER JOIN</code></pre>
+                    <pre><code>LEFT JOIN</code></pre>
+                    <pre><code>RIGHT JOIN</code></pre>
+                    <pre><code>FULL JOIN</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- 나머지 부분은 동일 -->
+    </div>
+    <script src="sql_study.js"></script>
+</body>
+</html>
