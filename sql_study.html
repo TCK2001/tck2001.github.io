@@ -13,7 +13,7 @@
         
         <!-- SELECT 주제 -->
         <div class="topic-group">
-            <h3 class="topic-title">SELECT</h3>
+            <h3 class="topic-title">Select</h3>
             <div class="accordion-item">
                 <button class="accordion-header">
                     1757. Recyclable and Low Fat Products
@@ -21,7 +21,7 @@
                 </button>
                 <div class="accordion-content">
                     <a href="https://leetcode.com/problems/recyclable-and-low-fat-products/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
-                    <p>Basic SELECT statement usage:</p>
+                    <p>Answer :</p>
                     <pre><code>select product_id
 from products
 where low_fats = 'Y' and recyclable = 'Y'</code></pre>
@@ -42,18 +42,68 @@ having ... 순서의 형식을 가진다</code></pre>
                 </button>
                 <div class="accordion-content">
                     <a href="https://leetcode.com/problems/find-customer-referee/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
-                    <p>Basic SELECT statement usage:</p>
+                    <p>Answer :</p>
                     <pre><code>select name
 from Customer
 where referee_id != 2 or referee_id is null</code></pre>
 <pre><code>SQL에서 <span class="keyword">not equal</span>는 python이랑 똑같음 <span class="keyword">!=</span></code></pre>
                 </div>
             </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    595. Big Countries
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/big-countries/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select name, population, area
+from World
+where area >= 3000000 or population >= 25000000</code></pre>
+<pre><code>문제 설명에 어쩔땐 <span class="keyword">at least</span> 가 있는데 이는 최소 이기 때문에 무조건 <span class="keyword">= </span>가 들어간다.</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1148. Article Views I
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/article-views-i/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select distinct(author_id) as id
+from views
+where viewer_id = author_id
+order by author_id asc</code></pre>
+<pre><code>SQL 문법 중에 <span class="keyword">order by</span>가 있음, 정렬 하는 용도 임으로 기본 값이 <span class="keyword">ascending (ASC)</span>임, 또는 <span class="keyword">내림차순 (Descending (DESC)도 가능)</span></code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1683. Invalid Tweets
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/invalid-tweets/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select tweet_id 
+from Tweets
+where length(content) > 15</code></pre>
+<pre><code>문제 설명에 어쩔땐 <span class="keyword">greater than</span> 이 있는데 이는 ~ 보다 크다를 의미함으로 <span class="keyword"> > </span>가 들어간다.</code></pre>
+                </div>
+            </div>
+
         </div>
 
         <!-- JOIN 주제 -->
         <div class="topic-group">
-            <h3 class="topic-title">JOIN</h3>
+            <h3 class="topic-title">Basic Joins</h3>
             <div class="accordion-item">
                 <button class="accordion-header">
                     Types of Joins
