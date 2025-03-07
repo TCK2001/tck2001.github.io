@@ -13,7 +13,7 @@
         
         <!-- SELECT 주제 -->
         <div class="topic-group">
-            <h3 class="topic-title">SELECT</h3>
+            <h3 class="topic-title">Select</h3>
             <div class="accordion-item">
                 <button class="accordion-header">
                     1757. Recyclable and Low Fat Products
@@ -21,7 +21,7 @@
                 </button>
                 <div class="accordion-content">
                     <a href="https://leetcode.com/problems/recyclable-and-low-fat-products/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
-                    <p>Basic SELECT statement usage:</p>
+                    <p>Answer :</p>
                     <pre><code>select product_id
 from products
 where low_fats = 'Y' and recyclable = 'Y'</code></pre>
@@ -42,31 +42,136 @@ having ... 순서의 형식을 가진다</code></pre>
                 </button>
                 <div class="accordion-content">
                     <a href="https://leetcode.com/problems/find-customer-referee/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
-                    <p>Basic SELECT statement usage:</p>
+                    <p>Answer :</p>
                     <pre><code>select name
 from Customer
 where referee_id != 2 or referee_id is null</code></pre>
 <pre><code>SQL에서 <span class="keyword">not equal</span>는 python이랑 똑같음 <span class="keyword">!=</span></code></pre>
                 </div>
             </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    595. Big Countries
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/big-countries/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select name, population, area
+from World
+where area >= 3000000 or population >= 25000000</code></pre>
+<pre><code>문제 설명에 어쩔땐 <span class="keyword">at least</span> 가 있는데 이는 최소 이기 때문에 무조건 <span class="keyword">= </span>가 들어간다.</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1148. Article Views I
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/article-views-i/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select distinct(author_id) as id
+from views
+where viewer_id = author_id
+order by author_id asc</code></pre>
+<pre><code>SQL 문법 중에 <span class="keyword">order by</span>가 있음, 정렬 하는 용도 임으로 기본 값이 <span class="keyword">ascending (ASC)</span>임, 또는 <span class="keyword">내림차순 (Descending (DESC)도 가능)</span></code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1683. Invalid Tweets
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/invalid-tweets/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select tweet_id 
+from Tweets
+where length(content) > 15</code></pre>
+<pre><code>문제 설명에 어쩔땐 <span class="keyword">greater than</span> 이 있는데 이는 ~ 보다 크다를 의미함으로 <span class="keyword"> > </span>가 들어간다.</code></pre>
+                </div>
+            </div>
+
         </div>
 
         <!-- JOIN 주제 -->
         <div class="topic-group">
-            <h3 class="topic-title">JOIN</h3>
+            <h3 class="topic-title">Basic Joins</h3>
             <div class="accordion-item">
                 <button class="accordion-header">
-                    Types of Joins
-                    <span class="difficulty hard">Hard</span>
+                    1378. Replace Employee ID With The Unique Identifier
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
                 </button>
                 <div class="accordion-content">
-                    <p>Different types of SQL joins:</p>
-                    <pre><code>INNER JOIN</code></pre>
-                    <pre><code>LEFT JOIN</code></pre>
-                    <pre><code>RIGHT JOIN</code></pre>
-                    <pre><code>FULL JOIN</code></pre>
+                    <a href="https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select eu.unique_id, e.name
+from employees as e 
+left join employeeUNI as eu 
+on e.id = eu.id</code></pre>
+<pre><code>딱히 어려운거 없는듯, 굳히 말하면 <span class="keyword">join</span>, <span class="keyword">left join</span> 등 알아두기 ?</code></pre>
                 </div>
             </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1068. Product Sales Analysis I
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/product-sales-analysis-i/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select p.product_name, s.year, s.price
+from sales as s 
+left join product as p 
+on s.product_id = p.product_id</code></pre>
+<pre><code>이전 문제랑 같음</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1581. Customer Who Visited but Did Not Make Any Transactions
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/customer-who-visited-but-did-not-make-any-transactions/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select v.customer_id, count(*) as count_no_trans
+from visits as v left join transactions as t on v.visit_id = t.visit_id
+where t.transaction_id is NULL
+group by v.customer_id</code></pre>
+<pre><code><span class="keyword">join</span> 을 하면은 매치 안되는것 들은 <span class="keyword">NULL</span> 이 생성된 다는거 잊지말기, 문제의 주요점은 방문했지만 물건을 안 산 횟수를 구하는게 문제이다.</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    197. Rising Temperature
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/rising-temperature/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select w2.id
+from weather as w1, weather as w2
+where datediff(w2.recorddate, w1.recorddate) = 1 and w2.temperature > w1.temperature</code></pre>
+<pre><code><span class="keyword">datediff</span> 사용하는 방법 알기 !, 그리고 SQL에서는 날짜를 그냥 <span class="keyword">'20xx-xx-xx' < '2025-03-7'</span> 이렇게 비교 할 수 있음.</code></pre>
+                </div>
+            </div>
+
+
         </div>
 
         <!-- 나머지 부분은 동일 -->
