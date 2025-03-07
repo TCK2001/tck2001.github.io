@@ -1,0 +1,157 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 슬라이더 공통 스타일 */
+.background-slider {
+    position: absolute;
+    width: 100%;
+    height: 300px; /* 슬라이더 높이 고정 */
+    overflow: hidden;
+    z-index: 1;
+}
+
+.top-slider {
+    top: 0;
+}
+
+.bottom-slider {
+    bottom: 0;
+}
+
+.slider-track {
+    display: flex;
+    width: calc((200px + 10px) * 15); /* 사진 5장 x 3 */
+    animation: slide 15s linear infinite;
+    will-change: transform;
+}
+
+.slider-track img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    margin: 0 5px; /* 양쪽 마진 5px로 총 10px */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(0); /* 시작 위치 */
+    }
+    to {
+        transform: translateX(calc(-200px * 5 - 10px * 5)); /* 5장 너비 + 마진만큼 이동 */
+    }
+}
+
+/* 시작 컨테이너 */
+#start-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    position: relative;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 36px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#start-btn {
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#start-btn:hover {
+    background-color: #ff5252;
+    transform: scale(1.05);
+}
+
+/* 📱 모바일 최적화 */
+@media (max-width: 768px) {
+    body {
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 🔄 배경 슬라이더 */
+    .background-slider {
+        height: 200px; /* 슬라이더 높이 줄이기 */
+    }
+
+    .slider-track img {
+        width: 150px; /* 이미지 크기 축소 */
+        height: 200px;
+        margin: 0 3px; /* 마진 축소 */
+        border-radius: 8px;
+    }
+
+    @keyframes slide {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(calc(-150px * 5 - 6px * 5)); /* 5장 너비 + 마진만큼 이동 */
+        }
+    }
+
+    /* 🏠 시작 컨테이너 */
+    #start-container {
+        width: 90%;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* 🎉 제목 크기 조정 */
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    /* 🚀 시작 버튼 */
+    #start-btn {
+        font-size: 16px;
+        padding: 12px 24px;
+        width: 100%;
+        max-width: 200px;
+        border-radius: 8px;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #start-btn:hover {
+        background-color: #ff5252;
+        transform: scale(1.05);
+    }
+}
