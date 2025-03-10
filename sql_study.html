@@ -106,17 +106,104 @@ where length(content) > 15</code></pre>
             <h3 class="topic-title">Basic Joins</h3>
             <div class="accordion-item">
                 <button class="accordion-header">
-                    Types of Joins
-                    <span class="difficulty hard">Hard</span>
+                    1378. Replace Employee ID With The Unique Identifier
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
                 </button>
                 <div class="accordion-content">
-                    <p>Different types of SQL joins:</p>
-                    <pre><code>INNER JOIN</code></pre>
-                    <pre><code>LEFT JOIN</code></pre>
-                    <pre><code>RIGHT JOIN</code></pre>
-                    <pre><code>FULL JOIN</code></pre>
+                    <a href="https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select eu.unique_id, e.name
+from employees as e 
+left join employeeUNI as eu 
+on e.id = eu.id</code></pre>
+<pre><code>딱히 어려운거 없는듯, 굳히 말하면 <span class="keyword">join</span>, <span class="keyword">left join</span> 등 알아두기 ?</code></pre>
                 </div>
             </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1068. Product Sales Analysis I
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/product-sales-analysis-i/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select p.product_name, s.year, s.price
+from sales as s 
+left join product as p 
+on s.product_id = p.product_id</code></pre>
+<pre><code>이전 문제랑 같음</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1581. Customer Who Visited but Did Not Make Any Transactions
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/customer-who-visited-but-did-not-make-any-transactions/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select v.customer_id, count(*) as count_no_trans
+from visits as v left join transactions as t on v.visit_id = t.visit_id
+where t.transaction_id is NULL
+group by v.customer_id</code></pre>
+<pre><code><span class="keyword">join</span> 을 하면은 매치 안되는것 들은 <span class="keyword">NULL</span> 이 생성된 다는거 잊지말기, 문제의 주요점은 방문했지만 물건을 안 산 횟수를 구하는게 문제이다.</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    197. Rising Temperature
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/rising-temperature/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select w2.id
+from weather as w1, weather as w2
+where datediff(w2.recorddate, w1.recorddate) = 1 and w2.temperature > w1.temperature</code></pre>
+<pre><code><span class="keyword">datediff</span> 사용하는 방법 알기 !, 그리고 SQL에서는 날짜를 그냥 <span class="keyword">'20xx-xx-xx' < '2025-03-7'</span> 이렇게 비교 할 수 있음.</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1661. Average Time of Process per Machine
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/average-time-of-process-per-machine/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select a1.machine_id, round(avg(a2.timestamp - a1.timestamp), 3) as processing_time
+from activity as a1, activity as a2
+where a2.machine_id = a1.machine_id and a2.activity_type = 'end' and a1.activity_type = 'start'
+group by a1.machine_id</code></pre>
+<pre><code>해당 문제는 <span class="keyword">round , avg , timestamp </span> 사용하는 방법 알기 !</code></pre>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    577. Employee Bonus
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/employee-bonus/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select e.name, b.bonus
+from employee as e left join bonus as b on e.empID = b.empID
+where b.bonus < 1000 or b.bonus is NULL</code></pre>
+<pre><code>해당 문제는 <span class="keyword">less than </span>은 <span class="keyword"><</span> 를 의미함. 반대로 <span class="keyword">greater than </span>은 <span class="keyword">></span> 를 의미함 </code></pre>
+                </div>
+            </div>
+
         </div>
 
         <!-- 나머지 부분은 동일 -->
