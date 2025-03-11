@@ -204,6 +204,47 @@ where b.bonus < 1000 or b.bonus is NULL</code></pre>
                 </div>
             </div>
 
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    1280. Students and Examinations
+                    <span class="difficulty easy">Easy</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/students-and-examinations/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select st.student_id, st.student_name, su.subject_name, count(ex.subject_name) as attended_exams
+from students as st 
+cross join subjects as su
+left join examinations as ex on st.student_id = ex.student_id and su.subject_name = ex.subject_name
+group by st.student_id, su.subject_name
+order by st.student_id, su.subject_name</code></pre>
+<pre><code>해당 문제는 <span class="keyword">cross join </span>을 알아야함. 두가지 table인 <span class="keyword">Students table:, Subjects table:</span>를 합치고 <span class="keyword">group by를 통해 묶어주고 계산하면 끝.</span></code></pre>
+<img src="basic_joins/cross_join.png" alt="Cross Join Example">
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    570. Managers with at Least 5 Direct Reports
+                    <span class="difficulty medium">Medium</span>
+                    <!-- <span class="difficulty medium">Medium</span> -->
+                </button>
+                <div class="accordion-content">
+                    <a href="https://leetcode.com/problems/managers-with-at-least-5-direct-reports/description/?envType=study-plan-v2&envId=top-sql-50" target="_blank" class="question-link">Question Link</a>
+                    <p>Answer :</p>
+                    <pre><code>select e.name
+from employee as e
+where e.id IN(
+    select em.managerId
+    from employee as em
+    group by em.managerId
+    having count(em.managerId) >= 5
+)</code></pre>
+<pre><code>해당 문제는 <span class="keyword">sub query </span>를 배우는 문제로 <span class="keyword">where </span>문에 또 다른 query를 사용해 조건을 추출해내는 것을 알 수 있다. <span class="keyword">group</span> 문 다음에는 <span class="keyword">having</span> 까먹지말기, <span class="keyword">where </span>아님.</code></pre>
+                </div>
+            </div>
+
         </div>
 
         <!-- 나머지 부분은 동일 -->
