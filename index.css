@@ -32,13 +32,13 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-right: 20px;
     position: relative;
-    width: 800px; /* 명시적인 너비 설정 */
-    max-width: 100%; /* 모바일에서 화면을 넘어가지 않도록 */
-    box-sizing: border-box; /* 패딩을 너비에 포함 */
+    width: 800px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 #video-wrapper {
-    width: 100%; /* 컨테이너에 맞춤 */
+    width: 100%;
     height: 500px;
     aspect-ratio: 16 / 9;
     position: relative;
@@ -56,8 +56,8 @@ video {
 
 #canvas {
     display: none;
-    width: 100%; /* 비디오와 동일한 크기로 설정 */
-    height: 500px; /* 비디오 래퍼와 동일한 높이 */
+    width: 100%;
+    height: 500px;
 }
 
 #capture-btn {
@@ -91,7 +91,7 @@ video {
 }
 
 video {
-    transition: transform 0.3s ease; /* 부드러운 전환 효과 */
+    transition: transform 0.3s ease;
 }
 
 #photo-preview { 
@@ -108,9 +108,9 @@ video {
 .preview-title {
     font-size: 24px;
     color: #333;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 */
-    margin: 0 0 15px 0; /* 아래쪽 여백 */
-    letter-spacing: 1px; /* 글자 간격 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    margin: 0 0 15px 0;
+    letter-spacing: 1px;
 }
 
 .photo-frame { 
@@ -141,7 +141,7 @@ video {
 
 /* Retake Button */
 #retake-btn {
-    background: linear-gradient(135deg, #FFC107, #FFA000); /* Yellow-orange gradient */
+    background: linear-gradient(135deg, #FFC107, #FFA000);
     color: rgb(252, 252, 252);
     margin-top: 10px;
     font-size: 16px;
@@ -154,14 +154,12 @@ video {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Hover 효과 */
 #retake-btn:hover {
-    background: linear-gradient(135deg, #FFB300, #FF6F00); /* Darker orange */
+    background: linear-gradient(135deg, #FFB300, #FF6F00);
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* 버튼 클릭 시 애니메이션 */
 #retake-btn:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -193,51 +191,60 @@ video {
     background-color: #e68a00;
 }
 
+/* Home 버튼 - 왼쪽 상단 */
 #home-btn {
     position: absolute;
     top: 20px;
     left: 20px;
-    padding: 8px 16px;
+    padding: 10px 20px;
     background-color: #333;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
+    font-size: 16px;
+    z-index: 100;
 }
 
-/* 기존 CSS에 추가 */
+#home-btn:hover {
+    background-color: #555;
+}
+
+/* SQL 버튼 - 오른쪽 상단 */
 #sql-btn {
     position: absolute;
     top: 20px;
-    right: 20px;
+    right: 180px; /* DNA 버튼 왼쪽에 위치 */
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
     text-decoration: none;
     border-radius: 5px;
     font-size: 16px;
+    z-index: 100;
 }
 
 #sql-btn:hover {
     background-color: #45a049;
 }
 
-/* 기존 CSS에 추가 */
+/* DNA Game 버튼 - 오른쪽 상단 (SQL 버튼 오른쪽) */
 #dna-game-btn {
     position: absolute;
     top: 20px;
-    right: 20px;
+    right: 20px; /* 제일 오른쪽 */
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #7e22ce; /* 보라색으로 구분 */
     color: white;
     text-decoration: none;
     border-radius: 5px;
     font-size: 16px;
+    z-index: 100;
 }
 
 #dna-game-btn:hover {
-    background-color: #45a049;
+    background-color: #6b21a8;
 }
 
 /* 📱 모바일 최적화 */
@@ -248,26 +255,41 @@ video {
         width: 100%;
     }
 
-    /* 🏠 홈 버튼 - 항상 최상단 유지 */
+    /* 🏠 홈 버튼 - 모바일에서 왼쪽 상단 */
     #home-btn {
         position: fixed;
         top: 15px;
         left: 15px;
-        padding: 10px 16px;
-        background-color: #333;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        z-index: 10; /* 다른 요소들 위에 위치 */
+        padding: 8px 14px;
+        font-size: 14px;
+        z-index: 1000;
+    }
+
+    /* SQL 버튼 - 모바일에서 오른쪽 상단 첫 번째 */
+    #sql-btn {
+        position: fixed;
+        top: 15px;
+        right: 100px; /* DNA 버튼 왼쪽 */
+        padding: 8px 14px;
+        font-size: 14px;
+        z-index: 1000;
+    }
+    
+    /* DNA Game 버튼 - 모바일에서 오른쪽 상단 두 번째 */
+    #dna-game-btn {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        padding: 8px 14px;
+        font-size: 14px;
+        z-index: 1000;
     }
     
     /* 📷 카메라 영역 */
     #camera-container {
         width: 100%;
         max-width: 400px;
-        margin-top: 500px; /* 너무 위로 올라가지 않도록 조정 */
+        margin-top: 70px; /* 버튼들이 가리지 않도록 여백 추가 */
         margin-bottom: 20px;
         padding: 15px;
     }
@@ -275,14 +297,14 @@ video {
     /* 🎥 비디오 화면 */
     #video-wrapper {
         width: 100%;
-        max-height: 250px; /* 촬영 화면이 너무 크지 않도록 제한 */
+        max-height: 250px;
         aspect-ratio: 16 / 9;
     }
 
     video {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* 전체 화면 유지 */
+        object-fit: cover;
     }
 
     /* 📸 촬영 버튼 */
@@ -301,7 +323,7 @@ video {
         width: 90%;
         max-width: 400px;
         padding: 15px;
-        margin-bottom: 20px; /* 여백 추가 */
+        margin-bottom: 20px;
     }
 
     /* 📷 사진 프레임 */
@@ -311,10 +333,10 @@ video {
     }
 
     .photo-frame img {
-        width: 90%; /* 프레임에 맞게 전체 너비 사용 */
-        height: auto; /* 비율 유지 */
-        max-height: 22%; /* 4장이 들어가도록 최대 높이 제한 (400px / 4 ≈ 100px 조정) */
-        object-fit: cover; /* 잘리지 않도록 */
+        width: 90%;
+        height: auto;
+        max-height: 22%;
+        object-fit: cover;
         margin: 2px 0;
     }
 
@@ -323,6 +345,6 @@ video {
         width: 120px;
         font-size: 14px;
         padding: 8px 14px;
-        margin-bottom: 10px; /* 버튼 간 간격 추가 */
+        margin-bottom: 10px;
     }
 }

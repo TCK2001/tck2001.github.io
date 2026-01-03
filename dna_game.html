@@ -19,6 +19,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
         }
 
         /* 遊戲設定畫面 */
@@ -29,6 +30,8 @@
             text-align: center;
             max-width: 500px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
         }
 
         .setup-title {
@@ -126,6 +129,8 @@
             max-width: 700px;
             width: 100%;
             display: none;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
@@ -390,6 +395,91 @@
         .message.error {
             background: linear-gradient(135deg, #fca5a5, #f87171);
             color: #991b1b;
+        }
+
+        /* DNA 序列意義說明 */
+        .sequence-meaning {
+            background: linear-gradient(135deg, #dfe7fd, #e0f2fe);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 2px solid #bfdbfe;
+        }
+
+        .meaning-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .meaning-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .codon-translation {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .codon-group {
+            display: flex;
+            gap: 3px;
+        }
+
+        .codon-base {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: white;
+        }
+
+        .arrow {
+            font-size: 1.5em;
+            color: #6b7280;
+        }
+
+        .amino-acid {
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .protein-name {
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 8px;
+            font-weight: bold;
+            color: #92400e;
+        }
+
+        .fun-fact {
+            margin-top: 10px;
+            padding: 12px;
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #065f46;
         }
 
         /* DNA 收集面板 */
@@ -671,6 +761,11 @@
         </div>
 
         <div class="message" id="message"></div>
+
+        <div class="sequence-meaning" id="sequenceMeaning" style="display: none;">
+            <div class="meaning-title">🧬 此 DNA 序列的意義</div>
+            <div class="meaning-content" id="meaningContent"></div>
+        </div>
     </div>
 
     <!-- DNA 收集面板 -->
@@ -724,6 +819,209 @@
         let collectedDNA = 0;
         let maxDNA = 5;
         let selectedCount = 0;
+
+        // 遺傳密碼表（密碼子 -> 胺基酸）- 繁體中文
+        const geneticCode = {
+            'ATG': { name: '甲硫胺酸', symbol: 'Met', emoji: '🟢', fact: '蛋白質合成的起始訊號！' },
+            'TGG': { name: '色胺酸', symbol: 'Trp', emoji: '🌙', fact: '對睡眠和情緒調節很重要' },
+            'TAA': { name: '終止', symbol: 'STOP', emoji: '🛑', fact: '蛋白質合成終止訊號' },
+            'TAG': { name: '終止', symbol: 'STOP', emoji: '🛑', fact: '蛋白質合成終止訊號' },
+            'TGA': { name: '終止', symbol: 'STOP', emoji: '🛑', fact: '蛋白質合成終止訊號' },
+            
+            'GCT': { name: '丙胺酸', symbol: 'Ala', emoji: '💪', fact: '能量代謝必需' },
+            'GCC': { name: '丙胺酸', symbol: 'Ala', emoji: '💪', fact: '能量代謝必需' },
+            'GCA': { name: '丙胺酸', symbol: 'Ala', emoji: '💪', fact: '能量代謝必需' },
+            'GCG': { name: '丙胺酸', symbol: 'Ala', emoji: '💪', fact: '能量代謝必需' },
+            
+            'CGT': { name: '精胺酸', symbol: 'Arg', emoji: '💙', fact: '有助於血管健康' },
+            'CGC': { name: '精胺酸', symbol: 'Arg', emoji: '💙', fact: '有助於血管健康' },
+            'CGA': { name: '精胺酸', symbol: 'Arg', emoji: '💙', fact: '有助於血管健康' },
+            'CGG': { name: '精胺酸', symbol: 'Arg', emoji: '💙', fact: '有助於血管健康' },
+            
+            'AAT': { name: '天門冬醯胺', symbol: 'Asn', emoji: '🧪', fact: '參與神經傳導' },
+            'AAC': { name: '天門冬醯胺', symbol: 'Asn', emoji: '🧪', fact: '參與神經傳導' },
+            
+            'GAT': { name: '天門冬胺酸', symbol: 'Asp', emoji: '⚡', fact: '對能量產生很重要' },
+            'GAC': { name: '天門冬胺酸', symbol: 'Asp', emoji: '⚡', fact: '對能量產生很重要' },
+            
+            'TGT': { name: '半胱胺酸', symbol: 'Cys', emoji: '🔗', fact: '形成蛋白質結構' },
+            'TGC': { name: '半胱胺酸', symbol: 'Cys', emoji: '🔗', fact: '形成蛋白質結構' },
+            
+            'CAA': { name: '麩醯胺酸', symbol: 'Gln', emoji: '🧠', fact: '對大腦功能很重要' },
+            'CAG': { name: '麩醯胺酸', symbol: 'Gln', emoji: '🧠', fact: '對大腦功能很重要' },
+            
+            'GAA': { name: '麩胺酸', symbol: 'Glu', emoji: '⚡', fact: '神經傳導物質' },
+            'GAG': { name: '麩胺酸', symbol: 'Glu', emoji: '⚡', fact: '神經傳導物質' },
+            
+            'GGT': { name: '甘胺酸', symbol: 'Gly', emoji: '✨', fact: '最小的胺基酸' },
+            'GGC': { name: '甘胺酸', symbol: 'Gly', emoji: '✨', fact: '最小的胺基酸' },
+            'GGA': { name: '甘胺酸', symbol: 'Gly', emoji: '✨', fact: '最小的胺基酸' },
+            'GGG': { name: '甘胺酸', symbol: 'Gly', emoji: '✨', fact: '最小的胺基酸' },
+            
+            'CAT': { name: '組胺酸', symbol: 'His', emoji: '🔬', fact: '對酵素活性很重要' },
+            'CAC': { name: '組胺酸', symbol: 'His', emoji: '🔬', fact: '對酵素活性很重要' },
+            
+            'ATT': { name: '異白胺酸', symbol: 'Ile', emoji: '💪', fact: '肌肉恢復必需' },
+            'ATC': { name: '異白胺酸', symbol: 'Ile', emoji: '💪', fact: '肌肉恢復必需' },
+            'ATA': { name: '異白胺酸', symbol: 'Ile', emoji: '💪', fact: '肌肉恢復必需' },
+            
+            'TTA': { name: '白胺酸', symbol: 'Leu', emoji: '🏋️', fact: '促進蛋白質合成' },
+            'TTG': { name: '白胺酸', symbol: 'Leu', emoji: '🏋️', fact: '促進蛋白質合成' },
+            'CTT': { name: '白胺酸', symbol: 'Leu', emoji: '🏋️', fact: '促進蛋白質合成' },
+            'CTC': { name: '白胺酸', symbol: 'Leu', emoji: '🏋️', fact: '促進蛋白質合成' },
+            'CTA': { name: '白胺酸', symbol: 'Leu', emoji: '🏋️', fact: '促進蛋白質合成' },
+            'CTG': { name: '白胺酸', symbol: 'Leu', emoji: '🏋️', fact: '促進蛋白質合成' },
+            
+            'AAA': { name: '離胺酸', symbol: 'Lys', emoji: '🛡️', fact: '增強免疫功能' },
+            'AAG': { name: '離胺酸', symbol: 'Lys', emoji: '🛡️', fact: '增強免疫功能' },
+            
+            'TTT': { name: '苯丙胺酸', symbol: 'Phe', emoji: '🧬', fact: '產生神經傳導物質' },
+            'TTC': { name: '苯丙胺酸', symbol: 'Phe', emoji: '🧬', fact: '產生神經傳導物質' },
+            
+            'CCT': { name: '脯胺酸', symbol: 'Pro', emoji: '🔄', fact: '膠原蛋白組成成分' },
+            'CCC': { name: '脯胺酸', symbol: 'Pro', emoji: '🔄', fact: '膠原蛋白組成成分' },
+            'CCA': { name: '脯胺酸', symbol: 'Pro', emoji: '🔄', fact: '膠原蛋白組成成分' },
+            'CCG': { name: '脯胺酸', symbol: 'Pro', emoji: '🔄', fact: '膠原蛋白組成成分' },
+            
+            'TCT': { name: '絲胺酸', symbol: 'Ser', emoji: '💧', fact: '調節酵素活性' },
+            'TCC': { name: '絲胺酸', symbol: 'Ser', emoji: '💧', fact: '調節酵素活性' },
+            'TCA': { name: '絲胺酸', symbol: 'Ser', emoji: '💧', fact: '調節酵素活性' },
+            'TCG': { name: '絲胺酸', symbol: 'Ser', emoji: '💧', fact: '調節酵素活性' },
+            
+            'ACT': { name: '蘇胺酸', symbol: 'Thr', emoji: '⚖️', fact: '維持蛋白質平衡' },
+            'ACC': { name: '蘇胺酸', symbol: 'Thr', emoji: '⚖️', fact: '維持蛋白質平衡' },
+            'ACA': { name: '蘇胺酸', symbol: 'Thr', emoji: '⚖️', fact: '維持蛋白質平衡' },
+            'ACG': { name: '蘇胺酸', symbol: 'Thr', emoji: '⚖️', fact: '維持蛋白質平衡' },
+            
+            'TAT': { name: '酪胺酸', symbol: 'Tyr', emoji: '🎯', fact: '參與賀爾蒙生成' },
+            'TAC': { name: '酪胺酸', symbol: 'Tyr', emoji: '🎯', fact: '參與賀爾蒙生成' },
+            
+            'GTT': { name: '纈胺酸', symbol: 'Val', emoji: '⚡', fact: '能量供應來源' },
+            'GTC': { name: '纈胺酸', symbol: 'Val', emoji: '⚡', fact: '能量供應來源' },
+            'GTA': { name: '纈胺酸', symbol: 'Val', emoji: '⚡', fact: '能量供應來源' },
+            'GTG': { name: '纈胺酸', symbol: 'Val', emoji: '⚡', fact: '能量供應來源' }
+        };
+
+        // 特定序列模式的意義
+        const specialSequences = {
+            'TATA': { name: 'TATA 盒', description: '基因表現的起始訊號！', icon: '🎬' },
+            'ATATAT': { name: '重複序列', description: '有助於 DNA 結構穩定', icon: '🔁' },
+            'GCGC': { name: 'GC 豐富區', description: '基因活躍的重要區域', icon: '🔥' },
+            'CGCG': { name: 'CpG 島', description: '基因調控重要位置', icon: '🏝️' }
+        };
+
+        // 翻譯序列
+        function translateSequence(sequence) {
+            const sequenceStr = sequence.join('');
+            const codons = [];
+            const aminoAcids = [];
+            
+            // 每3個切開成密碼子
+            for (let i = 0; i < sequenceStr.length; i += 3) {
+                const codon = sequenceStr.substr(i, 3);
+                if (codon.length === 3) {
+                    codons.push(codon);
+                    const aminoAcid = geneticCode[codon];
+                    if (aminoAcid) {
+                        aminoAcids.push(aminoAcid);
+                    }
+                }
+            }
+            
+            return { codons, aminoAcids, fullSequence: sequenceStr };
+        }
+
+        // 顯示序列意義
+        function displaySequenceMeaning(sequence) {
+            const translation = translateSequence(sequence);
+            const container = document.getElementById('sequenceMeaning');
+            const content = document.getElementById('meaningContent');
+            
+            content.innerHTML = '';
+            
+            // 顯示密碼子翻譯
+            if (translation.codons.length > 0) {
+                translation.codons.forEach((codon, idx) => {
+                    const aminoAcid = geneticCode[codon];
+                    const translationDiv = document.createElement('div');
+                    translationDiv.className = 'codon-translation';
+                    
+                    // 密碼子顯示
+                    const codonGroup = document.createElement('div');
+                    codonGroup.className = 'codon-group';
+                    codon.split('').forEach(base => {
+                        const baseDiv = document.createElement('div');
+                        baseDiv.className = `codon-base ${baseColors[base]}`;
+                        baseDiv.textContent = base;
+                        codonGroup.appendChild(baseDiv);
+                    });
+                    
+                    translationDiv.appendChild(codonGroup);
+                    
+                    // 箭頭
+                    const arrow = document.createElement('span');
+                    arrow.className = 'arrow';
+                    arrow.textContent = '→';
+                    translationDiv.appendChild(arrow);
+                    
+                    // 胺基酸
+                    const aaDiv = document.createElement('div');
+                    aaDiv.className = 'amino-acid';
+                    if (aminoAcid) {
+                        aaDiv.textContent = `${aminoAcid.emoji} ${aminoAcid.name} (${aminoAcid.symbol})`;
+                    } else {
+                        aaDiv.textContent = '❓ 未知';
+                        aaDiv.style.background = 'linear-gradient(135deg, #94a3b8, #64748b)';
+                    }
+                    translationDiv.appendChild(aaDiv);
+                    
+                    content.appendChild(translationDiv);
+                    
+                    // 有趣的知識
+                    if (aminoAcid && aminoAcid.fact) {
+                        const factDiv = document.createElement('div');
+                        factDiv.className = 'fun-fact';
+                        factDiv.innerHTML = `<strong>💡 知識：</strong> ${aminoAcid.fact}`;
+                        content.appendChild(factDiv);
+                    }
+                });
+            }
+            
+            // 檢查特殊序列模式
+            Object.keys(specialSequences).forEach(pattern => {
+                if (translation.fullSequence.includes(pattern)) {
+                    const special = specialSequences[pattern];
+                    const specialDiv = document.createElement('div');
+                    specialDiv.className = 'protein-name';
+                    specialDiv.innerHTML = `${special.icon} <strong>${special.name}</strong><br>${special.description}`;
+                    content.appendChild(specialDiv);
+                }
+            });
+            
+            // 蛋白質資訊
+            if (translation.aminoAcids.length > 0) {
+                const proteinDiv = document.createElement('div');
+                proteinDiv.className = 'protein-name';
+                
+                const hasStart = translation.codons.some(c => c === 'ATG');
+                const hasStop = translation.codons.some(c => ['TAA', 'TAG', 'TGA'].includes(c));
+                
+                if (hasStart && hasStop) {
+                    proteinDiv.innerHTML = '🎯 完整基因！可以製造蛋白質！';
+                } else if (hasStart) {
+                    proteinDiv.innerHTML = '🟢 包含蛋白質合成起始訊號！';
+                } else if (hasStop) {
+                    proteinDiv.innerHTML = '🛑 包含蛋白質合成終止訊號！';
+                } else {
+                    const aaCount = translation.aminoAcids.length;
+                    proteinDiv.innerHTML = `🧬 由 ${aaCount} 個胺基酸組成的胜肽序列`;
+                }
+                
+                content.appendChild(proteinDiv);
+            }
+            
+            container.style.display = 'block';
+        }
 
         // 設定畫面邏輯
         document.querySelectorAll('.count-option').forEach(option => {
@@ -844,11 +1142,18 @@
         }
 
         function restartGame() {
+            // 隱藏完成畫面
             document.getElementById('gameComplete').style.display = 'none';
+            
+            // 隱藏遊戲容器和DNA收集面板
             document.getElementById('gameContainer').style.display = 'none';
             document.getElementById('dnaCollection').style.display = 'none';
-            document.getElementById('gameSetup').style.display = 'flex';
+            document.getElementById('sequenceMeaning').style.display = 'none';
             
+            // 顯示設定畫面
+            document.getElementById('gameSetup').style.display = 'block';
+            
+            // 重置遊戲狀態
             score = 0;
             level = 1;
             collectedDNA = 0;
@@ -996,6 +1301,9 @@
                 
                 collectDNA();
                 
+                // 顯示序列意義
+                displaySequenceMeaning(targetSequence);
+                
                 if (collectedDNA < maxDNA) {
                     setTimeout(() => {
                         level++;
@@ -1005,7 +1313,8 @@
                         renderTarget();
                         updatePreview();
                         clearMessage();
-                    }, 2000);
+                        document.getElementById('sequenceMeaning').style.display = 'none';
+                    }, 5000); // 5秒讓玩家閱讀說明
                 }
             } else {
                 showMessage('序列不符合，請重新檢查順序！', 'error');
@@ -1021,6 +1330,7 @@
             renderGrid();
             updatePreview();
             clearMessage();
+            document.getElementById('sequenceMeaning').style.display = 'none';
         }
 
         function showMessage(text, type) {
