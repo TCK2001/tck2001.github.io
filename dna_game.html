@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA 配對遊戲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 遊戲設定畫面 */
+        .game-setup {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .setup-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #7e22ce;
+            margin-bottom: 15px;
+        }
+
+        .setup-emoji {
+            font-size: 5em;
+            margin: 20px 0;
+        }
+
+        .setup-description {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .dna-count-selector {
+            margin: 30px 0;
+        }
+
+        .selector-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .count-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .count-option {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #d1d5db;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .count-option:hover {
+            border-color: #7e22ce;
+            transform: scale(1.1);
+        }
+
+        .count-option.selected {
+            background: linear-gradient(135deg, #7e22ce, #6b21a8);
+            color: white;
+            border-color: #7e22ce;
+        }
+
+        .start-game-btn {
+            background: linear-gradient(135deg, #7e22ce, #6b21a8);
+            color: white;
+            padding: 18px 50px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .start-game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(126, 34, 206, 0.4);
+        }
+
+        .start-game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 遊戲主畫面 */
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 700px;
+            width: 100%;
+            display: none;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+            border-radius: 10px;
+        }
+
+        .score, .level {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .dna-info {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .dna-info-title {
+            font-size: 0.9em;
+            color: #92400e;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .base-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .base-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .base-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .target-container {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 15px;
+        }
+
+        .target-label {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .dna-sequence {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dna-base {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5em;
+            color: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .base-A { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .base-T { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .base-G { background: linear-gradient(135deg, #10b981, #059669); }
+        .base-C { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+        .sequence-preview {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            min-height: 90px;
+        }
+
+        .preview-label {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .preview-sequence {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-height: 50px;
+            align-items: center;
+        }
+
+        .preview-base {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3em;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .preview-base .order-number {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: white;
+            color: #333;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.7em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+            user-select: none;
+        }
+
+        .fruit {
+            aspect-ratio: 1;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            border: 3px solid transparent;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .fruit:hover:not(.used) {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .fruit.selected {
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .fruit.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: scale(0.9);
+        }
+
+        .fruit-emoji {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .fruit-base {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #7e22ce, #6b21a8);
+            color: white;
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #86efac, #4ade80);
+            color: #166534;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, #fca5a5, #f87171);
+            color: #991b1b;
+        }
+
+        /* DNA 收集面板 */
+        .dna-collection {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 200px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .collection-title {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .evolution-display {
+            text-align: center;
+            font-size: 5em;
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dna-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dna-slot {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            border: 2px dashed #d1d5db;
+        }
+
+        .dna-slot.collected {
+            background: linear-gradient(135deg, #dfe7fd, #e0f2fe);
+            border: 2px solid #3b82f6;
+            animation: collectPulse 0.5s ease;
+        }
+
+        @keyframes collectPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .slot-number {
+            width: 25px;
+            height: 25px;
+            background: #6b7280;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+
+        .dna-slot.collected .slot-number {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .slot-content {
+            flex: 1;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .dna-slot.collected .slot-content {
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        .collection-progress {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #6b21a8;
+        }
+
+        /* 遊戲完成畫面 */
+        .game-complete {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .complete-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            animation: completeBounce 0.6s ease;
+        }
+
+        @keyframes completeBounce {
+            0% { transform: scale(0.5); opacity: 0; }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .complete-emoji {
+            font-size: 8em;
+            margin-bottom: 20px;
+            animation: celebrate 1s ease infinite;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .complete-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #7e22ce;
+            margin-bottom: 15px;
+        }
+
+        .complete-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .complete-stats {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #7e22ce, #6b21a8);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .dna-collection {
+                position: static;
+                transform: none;
+                width: 100%;
+                margin-bottom: 20px;
+                margin-top: 20px;
+            }
+            
+            .game-setup, .complete-content {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 遊戲設定畫面 -->
+    <div class="game-setup" id="gameSetup">
+        <div class="setup-title">🧬 DNA 配對遊戲</div>
+        <div class="setup-emoji">🧬</div>
+        <div class="setup-description">
+            收集 DNA 序列，進化成人類！<br>
+            按順序組合鹼基，完成目標序列。
+        </div>
+        
+        <div class="dna-count-selector">
+            <div class="selector-label">選擇要收集的 DNA 數量</div>
+            <div class="count-options" id="countOptions">
+                <div class="count-option" data-count="3">3</div>
+                <div class="count-option" data-count="5">5</div>
+                <div class="count-option" data-count="7">7</div>
+                <div class="count-option" data-count="10">10</div>
+            </div>
+        </div>
+        
+        <button class="start-game-btn" id="startGameBtn" disabled>開始遊戲</button>
+    </div>
+
+    <!-- 遊戲主畫面 -->
+    <div class="game-container" id="gameContainer">
+        <h1>🧬 DNA 配對遊戲</h1>
+        <div class="subtitle">按順序組合鹼基序列！</div>
+        
+        <div class="game-info">
+            <div class="score">分數：<span id="score">0</span></div>
+            <div class="level">關卡：<span id="level">1</span></div>
+        </div>
+
+        <div class="dna-info">
+            <div class="dna-info-title">DNA 鹼基種類</div>
+            <div class="base-legend">
+                <div class="base-item">
+                    <div class="base-dot" style="background: #ef4444;"></div>
+                    <span>A (腺嘌呤)</span>
+                </div>
+                <div class="base-item">
+                    <div class="base-dot" style="background: #3b82f6;"></div>
+                    <span>T (胸腺嘧啶)</span>
+                </div>
+                <div class="base-item">
+                    <div class="base-dot" style="background: #10b981;"></div>
+                    <span>G (鳥嘌呤)</span>
+                </div>
+                <div class="base-item">
+                    <div class="base-dot" style="background: #f59e0b;"></div>
+                    <span>C (胞嘧啶)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="target-container">
+            <div class="target-label">目標 DNA 序列</div>
+            <div class="dna-sequence" id="targetSequence"></div>
+        </div>
+
+        <div class="sequence-preview">
+            <div class="preview-label">我的序列（順序很重要！）</div>
+            <div class="preview-sequence" id="previewSequence">
+                <span style="color: #999;">點擊水果來建立序列</span>
+            </div>
+        </div>
+
+        <div class="grid" id="grid"></div>
+
+        <div class="buttons">
+            <button class="submit-btn" onclick="checkAnswer()">提交</button>
+            <button class="clear-btn" onclick="clearSelection()">重設</button>
+        </div>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <!-- DNA 收集面板 -->
+    <div class="dna-collection" id="dnaCollection">
+        <div class="collection-title">🧬 DNA 收集</div>
+        <div class="evolution-display" id="evolutionDisplay">🧬</div>
+        <div class="dna-slots" id="dnaSlots"></div>
+        <div class="collection-progress" id="collectionProgress">0 / 5</div>
+    </div>
+
+    <!-- 遊戲完成畫面 -->
+    <div class="game-complete" id="gameComplete">
+        <div class="complete-content">
+            <div class="complete-emoji">🎉👤🎊</div>
+            <div class="complete-title">進化完成！</div>
+            <div class="complete-message">成功收集所有 DNA，進化成人類了！</div>
+            <div class="complete-stats">
+                <div class="stat-item">
+                    <span>最終分數</span>
+                    <strong id="finalScore">0</strong>
+                </div>
+                <div class="stat-item">
+                    <span>達到關卡</span>
+                    <strong id="finalLevel">1</strong>
+                </div>
+                <div class="stat-item">
+                    <span>收集的 DNA</span>
+                    <strong id="finalDNA">5 / 5 🧬</strong>
+                </div>
+            </div>
+            <button class="restart-btn" onclick="restartGame()">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        const fruitEmojis = ['🍎', '🍊', '🍋', '🍏', '🫐', '🍇', '🍓', '🥝', '🍑', '🍒'];
+        const bases = ['A', 'T', 'G', 'C'];
+        
+        const baseColors = {
+            'A': 'base-A',
+            'T': 'base-T',
+            'G': 'base-G',
+            'C': 'base-C'
+        };
+
+        let score = 0;
+        let level = 1;
+        let targetSequence = [];
+        let selectedSequence = [];
+        let fruits = [];
+        let collectedDNA = 0;
+        let maxDNA = 5;
+        let selectedCount = 0;
+
+        // 設定畫面邏輯
+        document.querySelectorAll('.count-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.count-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedCount = parseInt(this.dataset.count);
+                document.getElementById('startGameBtn').disabled = false;
+            });
+        });
+
+        document.getElementById('startGameBtn').addEventListener('click', function() {
+            if (selectedCount > 0) {
+                maxDNA = selectedCount;
+                document.getElementById('gameSetup').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+                document.getElementById('dnaCollection').style.display = 'block';
+                initGame();
+            }
+        });
+
+        // 進化階段（動態生成）
+        function getEvolutionStages(count) {
+            const baseStages = ['🧬', '🦠', '🐟', '🦎', '🐵', '👤'];
+            const stages = ['🧬']; // 起始點
+            
+            if (count <= 5) {
+                const step = 5 / count;
+                for (let i = 1; i <= count; i++) {
+                    const index = Math.min(Math.floor(i * step), baseStages.length - 1);
+                    stages.push(baseStages[index]);
+                }
+            } else {
+                // 超過5個則平均分配
+                const step = (baseStages.length - 1) / count;
+                for (let i = 1; i <= count; i++) {
+                    const index = Math.min(Math.floor(i * step), baseStages.length - 1);
+                    stages.push(baseStages[index]);
+                }
+            }
+            
+            // 確保最後一個是人類
+            stages[stages.length - 1] = '👤';
+            return stages;
+        }
+
+        let evolutionStages = [];
+
+        function initGame() {
+            collectedDNA = 0;
+            evolutionStages = getEvolutionStages(maxDNA);
+            renderDNASlots();
+            updateEvolution();
+            generateLevel();
+            renderGrid();
+            renderTarget();
+            updatePreview();
+        }
+
+        function renderDNASlots() {
+            const container = document.getElementById('dnaSlots');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < maxDNA; i++) {
+                const slot = document.createElement('div');
+                slot.className = `dna-slot ${i < collectedDNA ? 'collected' : ''}`;
+                slot.id = `slot-${i}`;
+                
+                const number = document.createElement('div');
+                number.className = 'slot-number';
+                number.textContent = i + 1;
+                
+                const content = document.createElement('div');
+                content.className = 'slot-content';
+                content.textContent = i < collectedDNA ? '✓ 已收集' : '未收集';
+                
+                slot.appendChild(number);
+                slot.appendChild(content);
+                container.appendChild(slot);
+            }
+            
+            updateCollectionProgress();
+        }
+
+        function updateCollectionProgress() {
+            document.getElementById('collectionProgress').textContent = `${collectedDNA} / ${maxDNA}`;
+        }
+
+        function updateEvolution() {
+            const display = document.getElementById('evolutionDisplay');
+            display.textContent = evolutionStages[collectedDNA];
+            display.classList.add('pulse');
+            setTimeout(() => display.classList.remove('pulse'), 500);
+        }
+
+        function collectDNA() {
+            if (collectedDNA < maxDNA) {
+                collectedDNA++;
+                
+                const slot = document.getElementById(`slot-${collectedDNA - 1}`);
+                slot.classList.add('collected');
+                slot.querySelector('.slot-content').textContent = '✓ 已收集';
+                
+                updateCollectionProgress();
+                updateEvolution();
+                
+                if (collectedDNA === maxDNA) {
+                    setTimeout(() => showGameComplete(), 1500);
+                }
+            }
+        }
+
+        function showGameComplete() {
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalLevel').textContent = level;
+            document.getElementById('finalDNA').textContent = `${maxDNA} / ${maxDNA} 🧬`;
+            document.getElementById('gameComplete').style.display = 'flex';
+        }
+
+        function restartGame() {
+            document.getElementById('gameComplete').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('dnaCollection').style.display = 'none';
+            document.getElementById('gameSetup').style.display = 'flex';
+            
+            score = 0;
+            level = 1;
+            collectedDNA = 0;
+            selectedCount = 0;
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+            document.querySelectorAll('.count-option').forEach(o => o.classList.remove('selected'));
+            document.getElementById('startGameBtn').disabled = true;
+        }
+
+        function generateLevel() {
+            const sequenceLength = Math.min(3 + Math.floor(level / 2), 8);
+            
+            targetSequence = [];
+            for (let i = 0; i < sequenceLength; i++) {
+                targetSequence.push(bases[Math.floor(Math.random() * bases.length)]);
+            }
+
+            fruits = [];
+            const gridSize = Math.min(16 + level * 2, 30);
+            
+            targetSequence.forEach(base => {
+                const emoji = fruitEmojis[Math.floor(Math.random() * fruitEmojis.length)];
+                fruits.push({ base, emoji, used: false });
+            });
+
+            while (fruits.length < gridSize) {
+                const base = bases[Math.floor(Math.random() * bases.length)];
+                const emoji = fruitEmojis[Math.floor(Math.random() * fruitEmojis.length)];
+                fruits.push({ base, emoji, used: false });
+            }
+
+            fruits.sort(() => Math.random() - 0.5);
+            selectedSequence = [];
+        }
+
+        function renderTarget() {
+            const container = document.getElementById('targetSequence');
+            container.innerHTML = '';
+            
+            targetSequence.forEach(base => {
+                const baseEl = document.createElement('div');
+                baseEl.className = `dna-base ${baseColors[base]}`;
+                baseEl.textContent = base;
+                container.appendChild(baseEl);
+            });
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            
+            fruits.forEach((fruit, index) => {
+                const fruitEl = document.createElement('div');
+                fruitEl.className = `fruit ${baseColors[fruit.base]}`;
+                if (fruit.used) {
+                    fruitEl.classList.add('used');
+                }
+                fruitEl.dataset.index = index;
+                
+                const emoji = document.createElement('div');
+                emoji.className = 'fruit-emoji';
+                emoji.textContent = fruit.emoji;
+                
+                const base = document.createElement('div');
+                base.className = 'fruit-base';
+                base.textContent = fruit.base;
+                
+                fruitEl.appendChild(emoji);
+                fruitEl.appendChild(base);
+                
+                if (!fruit.used) {
+                    fruitEl.addEventListener('click', () => selectFruit(index));
+                }
+                
+                grid.appendChild(fruitEl);
+            });
+        }
+
+        function selectFruit(index) {
+            const fruit = fruits[index];
+            if (fruit.used) return;
+
+            if (selectedSequence.length >= targetSequence.length) {
+                showMessage('無法再添加更多！', 'error');
+                setTimeout(clearMessage, 1500);
+                return;
+            }
+
+            selectedSequence.push({ index, base: fruit.base });
+            fruit.used = true;
+            
+            renderGrid();
+            updatePreview();
+            
+            const fruitEl = document.querySelector(`[data-index="${index}"]`);
+            fruitEl.classList.add('pulse');
+            setTimeout(() => fruitEl.classList.remove('pulse'), 500);
+        }
+
+        function updatePreview() {
+            const preview = document.getElementById('previewSequence');
+            preview.innerHTML = '';
+            
+            if (selectedSequence.length === 0) {
+                preview.innerHTML = '<span style="color: #999;">點擊水果來建立序列</span>';
+                return;
+            }
+
+            selectedSequence.forEach((item, idx) => {
+                const baseEl = document.createElement('div');
+                baseEl.className = `preview-base ${baseColors[item.base]}`;
+                baseEl.textContent = item.base;
+                
+                const orderNum = document.createElement('div');
+                orderNum.className = 'order-number';
+                orderNum.textContent = idx + 1;
+                
+                baseEl.appendChild(orderNum);
+                preview.appendChild(baseEl);
+            });
+        }
+
+        function checkAnswer() {
+            if (selectedSequence.length === 0) {
+                showMessage('請建立序列！', 'error');
+                return;
+            }
+
+            if (selectedSequence.length !== targetSequence.length) {
+                showMessage(`序列長度不符！(${selectedSequence.length}/${targetSequence.length})`, 'error');
+                setTimeout(clearMessage, 2000);
+                return;
+            }
+
+            const isMatch = selectedSequence.every((item, idx) => 
+                item.base === targetSequence[idx]
+            );
+
+            if (isMatch) {
+                score += 15 * level;
+                document.getElementById('score').textContent = score;
+                showMessage('完美！DNA 序列符合！🧬✨', 'success');
+                
+                collectDNA();
+                
+                if (collectedDNA < maxDNA) {
+                    setTimeout(() => {
+                        level++;
+                        document.getElementById('level').textContent = level;
+                        generateLevel();
+                        renderGrid();
+                        renderTarget();
+                        updatePreview();
+                        clearMessage();
+                    }, 2000);
+                }
+            } else {
+                showMessage('序列不符合，請重新檢查順序！', 'error');
+                setTimeout(clearMessage, 2000);
+            }
+        }
+
+        function clearSelection() {
+            selectedSequence.forEach(item => {
+                fruits[item.index].used = false;
+            });
+            selectedSequence = [];
+            renderGrid();
+            updatePreview();
+            clearMessage();
+        }
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = `message ${type}`;
+            msg.classList.add('pulse');
+            setTimeout(() => msg.classList.remove('pulse'), 500);
+        }
+
+        function clearMessage() {
+            document.getElementById('message').textContent = '';
+            document.getElementById('message').className = 'message';
+        }
+    </script>
+</body>
+</html>
