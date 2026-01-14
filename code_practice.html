@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NeetCode 150 – Practice Tracker (Lite)</title>
+  <link rel="stylesheet" href="./code_styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">N</div>
+      <div>
+        <div class="title">NeetCode 150</div>
+        <div class="subtitle">Practice Tracker (Lite)</div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats">
+      <!-- Filled by JS -->
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="controls">
+      <div class="control">
+        <label for="q">Search</label>
+        <input id="q" type="search" placeholder="Search by title / number (e.g., 217, Two Sum)" />
+      </div>
+
+      <div class="control">
+        <label for="cat">Category</label>
+        <select id="cat"></select>
+      </div>
+
+      <div class="control">
+        <label for="diff">Difficulty</label>
+        <select id="diff">
+          <option value="all">All</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="control actions">
+        <button id="btnExpand">Expand All</button>
+        <button id="btnCollapse">Collapse All</button>
+        <button id="btnReset" class="danger">Reset Checks</button>
+      </div>
+    </section>
+
+    <section id="board" class="board">
+      <!-- Filled by JS -->
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Links: Click the title → LeetCode, “NC” → NeetCode problem page</span>
+  </footer>
+
+  <script src="./code_app.js"></script>
+</body>
+</html>
