@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZALGO Corruptor / ZALGO 污染器</title>
+  <style>
+    :root{
+      --bg:#0b0b10; --panel:#141421; --line:#2a2a3a; --accent:#6c5ce7;
+      --text:#fff; --muted:rgba(255,255,255,.75);
+    }
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:var(--bg); color:var(--text);
+    }
+    .wrap{ max-width:980px; margin:40px auto; padding:0 16px; }
+    h1{ margin:0 0 10px; font-size:28px; letter-spacing:.2px; }
+    .sub{ margin:0 0 18px; color:var(--muted); font-size:14px; }
+
+    .panel{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.03);
+      border-radius:16px;
+      padding:16px;
+    }
+
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .row + .row{ margin-top:12px; }
+
+    input[type="text"], select, button{
+      padding:12px 14px; border-radius:12px; border:1px solid var(--line);
+      background:var(--panel); color:var(--text); outline:none;
+      font-size:14px;
+    }
+    input[type="text"]{ flex:1; min-width:260px; }
+
+    button{
+      cursor:pointer; border:none; background:var(--accent);
+      font-weight:600;
+    }
+    button.secondary{
+      background:transparent; border:1px solid var(--line); color:var(--text);
+    }
+    button:hover{ filter:brightness(1.05); }
+
+    /* Slider */
+    .sliderBox{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      flex: 1;
+      min-width: 300px;
+    }
+    .sliderBox label{
+      white-space:nowrap;
+      font-size:14px; color:var(--muted);
+    }
+    input[type="range"]{
+      width: 100%;
+      accent-color: var(--accent);
+    }
+    .val{
+      min-width:52px;
+      text-align:right;
+      font-variant-numeric: tabular-nums;
+      color:var(--text);
+      opacity:.9;
+    }
+
+    .hint{ margin-top:10px; color:var(--muted); font-size:13px; }
+
+    /* Output (moved down more) */
+    .stage{
+      margin-top:42px;            /* ✅ 더 아래로 */
+      padding:18px;
+      border:1px dashed #333;
+      border-radius:16px;
+      background: rgba(255,255,255,0.03);
+      overflow: visible;          /* 튀어나오기 */
+      position: relative;
+      min-height: 140px;
+    }
+
+    .out{
+      font-size: 72px;
+      line-height: 1.05;
+      text-shadow: 0 0 18px rgba(255,255,255,.15);
+      user-select: text;
+      display:inline-block;
+      transform: rotate(-1deg);
+    }
+
+    /* Wrap mode toggle */
+    .wrapOn .stage{ white-space: normal; }
+    .wrapOff .stage{ white-space: nowrap; } /* 기본: 옆으로 쭉 튐 */
+
+    /* Shake (fun) */
+    .shake{ animation: shake .09s infinite alternate; }
+    @keyframes shake {
+      from { transform: translate(-1px, 0) rotate(-1deg); }
+      to   { transform: translate( 1px, 0) rotate( 1deg); }
+    }
+
+    .chips{ margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
+    .chip{
+      padding:6px 10px; border:1px solid var(--line);
+      border-radius:999px; background:var(--panel);
+      font-size:12px; opacity:.85;
+    }
+  </style>
+</head>
+<body class="wrapOff">
+  <div class="wrap">
+    <h1>👁️ ZALGO Corruptor / ZALGO 污染器</h1>
+    <p class="sub">Type text → drag intensity → corrupt → copy. / 輸入文字 → 拖曳強度 → 污染 → 複製</p>
+
+    <div class="panel">
+      <div class="row">
+        <input id="txt" type="text" placeholder="Type something... / 輸入文字…" value="TCK ZALGO" />
+
+        <select id="mode" title="Direction / 方向">
+          <option value="all" selected>All / 全部</option>
+          <option value="up">Up only / 只往上</option>
+          <option value="down">Down only / 只往下</option>
+          <option value="mid">Middle only / 只中間</option>
+        </select>
+
+        <button id="go" title="Corrupt / 污染">Corrupt / 污染</button>
+        <button id="copy" class="secondary" title="Copy / 複製">Copy / 複製</button>
+        <button id="clear" class="secondary" title="Clear / 清除">Clear / 清除</button>
+      </div>
+
+      <div class="row">
+        <div class="sliderBox">
+          <label for="intensity">Intensity / 強度</label>
+          <input id="intensity" type="range" min="0" max="180" value="35" step="1" />
+          <div class="val" id="ival">35</div>
+        </div>
+
+        <button id="toggleWrap" class="secondary" title="Toggle wrapping / 切換換行">
+          Wrap: OFF / 換行：關
+        </button>
+      </div>
+
+      <div class="hint">
+        Tip: Higher intensity makes it spill outside the box. / 強度越高越容易「噴出框外」🤣
+      </div>
+    </div>
+
+    <div class="stage">
+      <div id="out" class="out"></div>
+    </div>
+
+    <div class="chips">
+      <span class="chip">overflow: visible</span>
+      <span class="chip">wrap toggle</span>
+      <span class="chip">combining diacritics</span>
+      <span class="chip">OBS browser-source ready</span>
+    </div>
+  </div>
+
+  <script>
+    // Combining diacritics pools
+    const UP = [
+      ...range(0x0300, 0x0315),
+      ...range(0x031A, 0x0338),
+    ];
+    const DOWN = [
+      ...range(0x0339, 0x034F),
+      ...range(0x0350, 0x036F),
+    ];
+    const MID = [0x0334,0x0335,0x0336,0x0337,0x0338,0x0489].filter(Boolean);
+
+    function range(a,b){ const arr=[]; for(let i=a;i<=b;i++) arr.push(i); return arr; }
+    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+    function toChar(cp){ return String.fromCharCode(cp); }
+
+    function zalgoize(text, n, mode){
+      return [...text].map(ch => {
+        if (ch === " ") return ch;
+        let add = "";
+
+        const upCount   = (mode === "down") ? 0 : Math.floor(n * (0.45 + Math.random()*0.35));
+        const downCount = (mode === "up")   ? 0 : Math.floor(n * (0.45 + Math.random()*0.35));
+        const midCount  = (mode === "all" || mode === "mid") ? Math.floor(n * (0.10 + Math.random()*0.15)) : 0;
+
+        for(let i=0;i<upCount;i++)   add += toChar(pick(UP));
+        for(let i=0;i<midCount;i++)  add += toChar(pick(MID));
+        for(let i=0;i<downCount;i++) add += toChar(pick(DOWN));
+
+        return ch + add;
+      }).join("");
+    }
+
+    const txt = document.getElementById("txt");
+    const out = document.getElementById("out");
+    const intensity = document.getElementById("intensity");
+    const ival = document.getElementById("ival");
+    const mode = document.getElementById("mode");
+    const body = document.body;
+
+    function render(){
+      const n = parseInt(intensity.value, 10);
+      ival.textContent = String(n);
+
+      const base = txt.value || "";
+      const z = zalgoize(base, n, mode.value);
+      out.textContent = z;
+
+      out.classList.toggle("shake", n >= 80);
+    }
+
+    document.getElementById("go").addEventListener("click", render);
+    document.getElementById("clear").addEventListener("click", () => {
+      txt.value = "";
+      out.textContent = "";
+      intensity.value = 35;
+      ival.textContent = "35";
+    });
+
+    // Slider live update
+    intensity.addEventListener("input", render);
+    mode.addEventListener("change", render);
+    txt.addEventListener("input", () => {
+      // 입력이 너무 길면 렌더링이 빡셀 수 있어서 약간 제한
+      if (txt.value.length <= 80) render();
+    });
+
+    // Wrap toggle
+    const toggleWrapBtn = document.getElementById("toggleWrap");
+    let wrapOn = false;
+    function updateWrapUI(){
+      wrapOn = !wrapOn;
+      body.classList.toggle("wrapOn", wrapOn);
+      body.classList.toggle("wrapOff", !wrapOn);
+      toggleWrapBtn.textContent = wrapOn ? "Wrap: ON / 換行：開" : "Wrap: OFF / 換行：關";
+    }
+    toggleWrapBtn.addEventListener("click", updateWrapUI);
+
+    // Copy
+    document.getElementById("copy").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(out.textContent);
+        alert("Copied! / 已複製！");
+      }catch{
+        const ta = document.createElement("textarea");
+        ta.value = out.textContent;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        alert("Copied! / 已複製！");
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
