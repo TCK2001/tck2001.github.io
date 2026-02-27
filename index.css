@@ -264,6 +264,24 @@ video {
     background-color: #0284c7;
 }
 
+/* Fortune 버튼 - 오른쪽 상단 (Code Practice 왼쪽) */
+#fortune-btn {
+    position: absolute;
+    top: 20px;
+    right: 520px; /* Code Practice(340px) 왼쪽에 배치 */
+    padding: 10px 20px;
+    background-color: #f59e0b; /* 골드/오렌지 (운세 느낌) */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 100;
+}
+
+#fortune-btn:hover {
+    background-color: #d97706;
+}
+
 /* 📱 모바일 최적화 */
 @media (max-width: 768px) {
     #container {
@@ -297,6 +315,15 @@ video {
         position: fixed;
         top: 15px;
         right: 15px;
+        padding: 8px 14px;
+        font-size: 14px;
+        z-index: 1000;
+    }
+    
+    #fortune-btn {
+        position: fixed;
+        top: 15px;
+        right: 185px;
         padding: 8px 14px;
         font-size: 14px;
         z-index: 1000;
