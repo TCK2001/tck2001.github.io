@@ -52,6 +52,7 @@ video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 #canvas {
@@ -88,10 +89,6 @@ video {
 
 #flip-camera-btn:hover {
     background-color: #e68a00;
-}
-
-video {
-    transition: transform 0.3s ease;
 }
 
 #photo-preview { 
@@ -191,95 +188,111 @@ video {
     background-color: #e68a00;
 }
 
-/* Home 버튼 - 왼쪽 상단 */
-#home-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
+/* =========================
+   ✅ Right Drawer Menu
+========================= */
+
+/* top-right toggle button */
+#menu-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
     border: none;
-    border-radius: 5px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
     cursor: pointer;
-    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* "짝대기" */
+#menu-toggle .menu-bar {
+    width: 2px;
+    height: 22px;
+    background: #111;
+    display: inline-block;
+    opacity: 0.9;
+}
+
+/* hamburger icon */
+#menu-toggle .menu-icon {
+    font-size: 22px;
+    line-height: 1;
+    color: #111;
+}
+
+/* drawer panel */
+#right-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 280px;
+    background: white;
+    z-index: 2500;
+    transform: translateX(110%);
+    transition: transform 0.28s ease;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+/* open state */
+#right-drawer.open {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    font-weight: 700;
     font-size: 16px;
-    z-index: 100;
 }
 
-#home-btn:hover {
-    background-color: #555;
+#drawer-close {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-/* SQL 버튼 - 오른쪽 상단 */
-#sql-btn {
-    position: absolute;
-    top: 20px;
-    right: 180px; /* DNA 버튼 왼쪽에 위치 */
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+/* drawer links */
+#right-drawer a {
     text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    z-index: 100;
+    color: #111;
+    padding: 12px 10px;
+    border-radius: 10px;
+    margin-top: 6px;
+    font-size: 15px;
 }
 
-#sql-btn:hover {
-    background-color: #45a049;
+#right-drawer a:hover {
+    background: #f3f4f6;
 }
 
-/* DNA Game 버튼 - 오른쪽 상단 (SQL 버튼 오른쪽) */
-#dna-game-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px; /* 제일 오른쪽 */
-    padding: 10px 20px;
-    background-color: #7e22ce; /* 보라색으로 구분 */
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    z-index: 100;
+/* backdrop */
+#drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 2400;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
 }
 
-#dna-game-btn:hover {
-    background-color: #6b21a8;
-}
-
-#code-practice-btn {
-    position: absolute;
-    top: 20px;
-    right: 340px; /* DNA Game 버튼(오른쪽 20px) 왼쪽에 배치 */
-    padding: 10px 20px;
-    background-color: #0ea5e9; /* 하늘색(구분용) */
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    z-index: 100;
-}
-
-#code-practice-btn:hover {
-    background-color: #0284c7;
-}
-
-/* Fortune 버튼 - 오른쪽 상단 (Code Practice 왼쪽) */
-#fortune-btn {
-    position: absolute;
-    top: 20px;
-    right: 520px; /* Code Practice(340px) 왼쪽에 배치 */
-    padding: 10px 20px;
-    background-color: #f59e0b; /* 골드/오렌지 (운세 느낌) */
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    z-index: 100;
-}
-
-#fortune-btn:hover {
-    background-color: #d97706;
+#drawer-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* 📱 모바일 최적화 */
@@ -290,50 +303,23 @@ video {
         width: 100%;
     }
 
-    /* 🏠 홈 버튼 - 모바일에서 왼쪽 상단 */
-    #home-btn {
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        padding: 8px 14px;
-        font-size: 14px;
-        z-index: 1000;
+    /* drawer toggle (mobile) */
+    #menu-toggle {
+        top: 12px;
+        right: 12px;
     }
 
-    /* SQL 버튼 - 모바일에서 오른쪽 상단 첫 번째 */
-    #sql-btn {
-        position: fixed;
-        top: 15px;
-        right: 100px; /* DNA 버튼 왼쪽 */
-        padding: 8px 14px;
-        font-size: 14px;
-        z-index: 1000;
+    /* drawer width (mobile) */
+    #right-drawer {
+        width: 78vw;
+        max-width: 320px;
     }
-    
-    /* DNA Game 버튼 - 모바일에서 오른쪽 상단 두 번째 */
-    #dna-game-btn {
-        position: fixed;
-        top: 15px;
-        right: 15px;
-        padding: 8px 14px;
-        font-size: 14px;
-        z-index: 1000;
-    }
-    
-    #fortune-btn {
-        position: fixed;
-        top: 15px;
-        right: 185px;
-        padding: 8px 14px;
-        font-size: 14px;
-        z-index: 1000;
-    }
-    
+
     /* 📷 카메라 영역 */
     #camera-container {
         width: 100%;
         max-width: 400px;
-        margin-top: 70px; /* 버튼들이 가리지 않도록 여백 추가 */
+        margin-top: 70px; /* 메뉴 버튼이 가리지 않도록 여백 */
         margin-bottom: 20px;
         padding: 15px;
     }
@@ -343,12 +329,6 @@ video {
         width: 100%;
         max-height: 250px;
         aspect-ratio: 16 / 9;
-    }
-
-    video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
     }
 
     /* 📸 촬영 버튼 */
