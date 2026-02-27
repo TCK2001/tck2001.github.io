@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>刮刮樂 VAULT</title>
+  <link rel="stylesheet" href="fortune_style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+TC:wght@600;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="header-title">刮刮樂</span>
+    <span class="header-sub">VAULT</span>
+    <span class="header-spacer"></span>
+    <span class="newyear-badge" aria-label="Happy New Year">新年快樂</span>
+    <span class="pill" id="left-pill">LEFT  0</span>
+  </div>
+
+  <!-- Body -->
+  <div class="body">
+
+    <!-- ══ SETUP PAGE ══ -->
+    <div class="page active" id="setup-page">
+
+      <!-- Players -->
+      <div class="card">
+        <div class="card-title">Players</div>
+        <div class="row">
+          <input class="field" id="player-input" placeholder="Player name" />
+          <button class="btn-gold" onclick="addPlayer()">ADD</button>
+        </div>
+        <div class="tags" id="player-tags"></div>
+        <div class="empty-hint" id="player-empty" style="display:none">Add players to begin</div>
+      </div>
+
+      <!-- Prizes -->
+      <div class="card">
+        <div class="card-title">Prizes</div>
+        <div class="row">
+          <input class="field" id="prize-input" placeholder="Prize name" style="flex:3" />
+          <input class="field qty" id="qty-input" placeholder="Qty" type="number" min="1" value="1" />
+          <button class="btn-gold" onclick="addPrize()">ADD</button>
+        </div>
+        <div class="prize-list" id="prize-list"></div>
+      </div>
+
+      <!-- Ready -->
+      <div class="card">
+        <div class="card-title">Ready?</div>
+        <div class="ready-text" id="ready-text"></div>
+      </div>
+
+    </div><!-- /setup-page -->
+
+    <!-- ══ PLAY PAGE ══ -->
+    <div class="page" id="play-page">
+
+      <!-- Turn bar -->
+      <div class="turn-bar">
+        <span class="turn-label">NOW</span>
+        <span class="turn-name" id="turn-name">—</span>
+        <button class="btn-gold" onclick="nextTurn()">NEXT →</button>
+      </div>
+
+      <!-- Scratch card -->
+      <div class="scratch-wrap" id="scratch-wrap">
+
+        <!-- Back layer -->
+        <div class="card-back" id="card-back">
+          <div class="card-watermark-tl">刮刮樂  VAULT</div>
+          <div class="card-watermark-br">PRIVATE  EDITION</div>
+
+          <!-- Scattered letter slots (injected by JS) -->
+          <div id="letter-container"></div>
+
+          <!-- Hint (before scratch) -->
+          <div class="hint-wrap" id="hint-wrap">
+            <div class="hint-marks">????</div>
+            <div class="hint-text">Scratch to reveal the prize</div>
+          </div>
+
+          <!-- Result overlay -->
+          <div class="result-overlay" id="result-overlay">
+            <div class="result-emoji" id="result-emoji"></div>
+            <div class="result-box" id="result-box"></div>
+          </div>
+        </div>
+
+        <!-- Foil canvas -->
+        <canvas id="foil-canvas"></canvas>
+
+      </div><!-- /scratch-wrap -->
+
+      <!-- Action buttons -->
+      <div class="action-row">
+        <button class="btn-ghost" onclick="resetScratch()">RESET</button>
+        <button class="btn-gold wide" onclick="revealNow()">REVEAL NOW</button>
+      </div>
+
+      <!-- Inventory -->
+      <div class="inventory">
+        <div class="inv-title">INVENTORY</div>
+        <div class="inv-tags" id="inv-tags"></div>
+      </div>
+
+    </div><!-- /play-page -->
+
+  </div><!-- /body -->
+
+  <!-- Bottom nav -->
+  <div class="nav">
+    <button class="nav-btn active" id="nav-setup" onclick="switchTab(0)">SETUP</button>
+    <button class="nav-btn"        id="nav-play"  onclick="switchTab(1)">PLAY</button>
+  </div>
+
+  <div class="dialog-footer-mini">
+  © <span id="year"></span> TCK · <a href="mailto:ekatmdrkd2@gmail.com">email</a>
+  </div>
+
+</div><!-- /app -->
+
+<!-- Result dialog -->
+<div class="dialog-overlay" id="dialog-overlay" onclick="closeDialog(event)">
+  <div class="dialog" id="dialog">
+    <div class="dialog-emoji"  id="d-emoji"></div>
+    <div class="dialog-player" id="d-player"></div>
+    <div class="dialog-sub"    id="d-sub"></div>
+    <div class="dialog-prize"  id="d-prize"></div>
+    <button class="btn-gold dialog-ok" onclick="closeDialogDirect()">OK</button>
+  </div>
+</div>
+
+<script src="fortune_app.js"></script>
+</body>
+</html>
