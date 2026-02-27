@@ -10,11 +10,31 @@
 </head>
 <body>
     <div id="container">
-        <a href="photos.html" id="home-btn">Home</a>
-        <a href="sql_study.html" id="sql-btn">SQL Study</a> <!-- SQL 버튼 추가 -->
-        <a href="dna_game.html" id="dna-game-btn">DNA Game</a>
-        <a href="code_practice.html" id="code-practice-btn">Code Practice</a>
-        <a href="fortune_index.html" id="fortune-btn">Fortune Simulator</a>
+
+        <!-- ✅ 오른쪽 짝대기 + 햄버거 버튼 -->
+        <button id="menu-toggle" aria-label="Open menu" aria-expanded="false">
+            <span class="menu-bar"></span>
+            <span class="menu-icon">≡</span>
+        </button>
+
+        <!-- ✅ 오른쪽 슬라이드 메뉴 -->
+        <nav id="right-drawer" aria-hidden="true">
+            <div class="drawer-header">
+                <span>Menu</span>
+                <button id="drawer-close" aria-label="Close menu">✕</button>
+            </div>
+
+            <a href="photos.html">Home</a>
+            <a href="sql_study.html">SQL Study</a>
+            <a href="dna_game.html">DNA Game</a>
+            <a href="code_practice.html">Code Practice</a>
+            <a href="fortune_index.html">Fortune Simulator</a>
+            <a href="zalgo.html">Zalgo Generator</a>
+        </nav>
+
+        <!-- ✅ 배경 클릭 닫기용 -->
+        <div id="drawer-backdrop"></div>
+
         <div id="camera-container">
             <div id="video-wrapper">
                 <video id="video" autoplay playsinline></video>
@@ -23,17 +43,19 @@
             <button id="flip-camera-btn">Flip Camera</button>
             <canvas id="canvas"></canvas>
         </div>
+
         <div id="photo-preview">
             <h2 class="preview-title">Preview</h2>
             <div class="photo-frame" id="photo-frame"></div>
             <div class="color-buttons">
                 <input type="color" id="color-picker">
             </div>
-            <button id="retake-btn">Retake</button> <!-- Added Retake Button -->
+            <button id="retake-btn">Retake</button>
             <button id="download-btn">Download</button>
             <button id="share-btn">Share</button>
         </div>        
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="index.js"></script>
 </body>
