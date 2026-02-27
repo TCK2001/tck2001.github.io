@@ -1,4 +1,44 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    // ✅ Drawer menu elements (추가)
+    const toggleBtn = document.getElementById("menu-toggle");
+    const drawer = document.getElementById("right-drawer");
+    const closeBtn = document.getElementById("drawer-close");
+    const backdrop = document.getElementById("drawer-backdrop");
+
+    function openDrawer() {
+        drawer.classList.add("open");
+        backdrop.classList.add("show");
+        toggleBtn.setAttribute("aria-expanded", "true");
+        drawer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeDrawer() {
+        drawer.classList.remove("open");
+        backdrop.classList.remove("show");
+        toggleBtn.setAttribute("aria-expanded", "false");
+        drawer.setAttribute("aria-hidden", "true");
+    }
+
+    if (toggleBtn && drawer && closeBtn && backdrop) {
+        toggleBtn.addEventListener("click", () => {
+            if (drawer.classList.contains("open")) closeDrawer();
+            else openDrawer();
+        });
+
+        closeBtn.addEventListener("click", closeDrawer);
+        backdrop.addEventListener("click", closeDrawer);
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeDrawer();
+        });
+
+        drawer.querySelectorAll("a").forEach(a => {
+            a.addEventListener("click", closeDrawer);
+        });
+    }
+
+    // ===== 기존 코드 그대로 =====
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const captureBtn = document.getElementById('capture-btn');
@@ -6,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const colorButtons = document.querySelector('.color-buttons');
     const downloadBtn = document.getElementById('download-btn');
     const shareBtn = document.getElementById('share-btn');
-    const homeBtn = document.getElementById('home-btn');
     const colorPicker = document.getElementById('color-picker');
     const retakeBtn = document.getElementById('retake-btn'); // Retake Button
     const flipCameraBtn = document.getElementById('flip-camera-btn'); // 카메라 전환 버튼 추가
@@ -228,13 +267,6 @@ document.addEventListener('DOMContentLoaded', function () {
         photoFrame.innerHTML = ""; // 사진 삭제
         updateButtons();
     }
-
-    homeBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        stopCamera();
-        resetPhotos();
-        window.location.href = 'photos.html';
-    });
 
     // 초기 버튼 상태 설정
     updateButtons();
