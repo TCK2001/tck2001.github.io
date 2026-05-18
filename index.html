@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TCK Lab | Personal Website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <header class="topbar">
+    <button class="brand" data-page="home" aria-label="Go home">
+      <span class="brand-mark">T</span>
+      <span class="brand-text">TCK Lab</span>
+    </button>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <aside class="side-menu" id="sideMenu" aria-hidden="true">
+    <div class="side-menu-head">
+      <p>MENU</p>
+      <button id="menuClose" aria-label="Close menu">×</button>
+    </div>
+    <nav class="side-menu-list">
+      <button data-page="home">Home</button>
+      <button data-page="practice">Code Practice</button>
+      <button class="soon" disabled>Projects · soon</button>
+      <button class="soon" disabled>Blog · soon</button>
+      <button class="soon" disabled>Contact · soon</button>
+    </nav>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <main>
+    <section class="page active home-page" id="homePage">
+      <canvas class="hero-particles" id="heroParticles" aria-hidden="true"></canvas>
+
+      <div class="home-grid-bg" aria-hidden="true"></div>
+
+      <div class="hero-shell portfolio-hero">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Personal Website · Portfolio · Digital Lab</p>
+          <h1>
+            <span class="gradient-text">Designing</span><br />
+            my own digital<br />
+            universe.
+          </h1>
+          <p class="hero-desc">
+            Welcome to my personal digital space. This is not just a code practice page.
+            It is a home for my projects, ideas, learning notes, and growth journey.
+            I turn small experiments into polished experiences that feel like real products.
+          </p>
+
+          <div class="hero-actions">
+            <a class="primary-btn" href="#introCards">Explore My Website</a>
+            <button class="ghost-btn" type="button" data-open-menu>Open Menu</button>
+          </div>
+
+          <div class="hero-meta-strip" aria-label="Website highlights">
+            <span>AI Projects</span>
+            <span>Web Design</span>
+            <span>Python Tools</span>
+            <span>Learning Logs</span>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal delay-1" aria-hidden="true">
+          <div class="orb orb-a"></div>
+          <div class="orb orb-b"></div>
+          <div class="orbit-system">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="orbit orbit-three"></div>
+            <div class="core-card glass-card" data-tilt>
+              <div class="card-topline">
+                <span class="status-dot"></span>
+                <span>Portfolio System Online</span>
+              </div>
+              <h2>TCK Lab</h2>
+              <p id="typingLine">Ideas become projects.</p>
+              <div class="signal-bars">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+          <div class="floating-chip chip-1">AI</div>
+          <div class="floating-chip chip-2">Portfolio</div>
+          <div class="floating-chip chip-3">Creative Coding</div>
+        </div>
+      </div>
+
+      <div class="intro-cards" id="introCards">
+        <article class="profile-card feature-card reveal delay-2" data-tilt>
+          <span>01</span>
+          <h3>About This Website</h3>
+          <p>This website introduces who I am and collects my projects, experiments, and learning records in one personal space.</p>
+        </article>
+        <article class="profile-card feature-card reveal delay-3" data-tilt>
+          <span>02</span>
+          <h3>What I Build</h3>
+          <p>I build working products from ideas, including Python automation, AI projects, websites, and data analysis tools.</p>
+        </article>
+        <article class="profile-card feature-card reveal delay-4" data-tilt>
+          <span>03</span>
+          <h3>Hidden Tools</h3>
+          <p>Code Practice is just one tool inside the menu. The main page focuses on the identity and atmosphere of this website.</p>
+        </article>
+      </div>
+
+      <section class="showcase-section reveal delay-4">
+        <div>
+          <p class="eyebrow">Interactive Experience</p>
+          <h2>Animated backgrounds, glowing cards, and smooth reveal effects.</h2>
+        </div>
+        <p>
+          Move your mouse and the glow follows. The visual system floats gently,
+          and each card reacts with a subtle 3D tilt. The structure is ready for future Projects, Blog, and Contact sections.
+        </p>
+      </section>
+    </section>
+
+    <section class="page" id="practicePage">
+      <div class="practice-hero reveal">
+        <div>
+          <p class="eyebrow">Personal Algorithm Tracker</p>
+          <h1>Code Practice</h1>
+          <p>A category-based algorithm tracker inspired by NeetCode 150. Each user can save their own progress separately.</p>
+        </div>
+        <div class="user-panel">
+          <label for="userName">User</label>
+          <div class="user-input-row">
+            <input id="userName" type="text" placeholder="e.g. tck" autocomplete="off" />
+            <button id="switchUserBtn">Load</button>
+          </div>
+          <small>Saved locally in this browser using localStorage.</small>
+        </div>
+      </div>
+
+      <section class="dashboard reveal delay-1" aria-label="Progress dashboard">
+        <div class="progress-card total-progress">
+          <div class="progress-ring" id="progressRing" style="--progress:0deg">
+            <span id="overallPercent">0%</span>
+          </div>
+          <div>
+            <p class="label">Total Solved</p>
+            <h2><span id="solvedCount">0</span>/<span id="totalCount">150</span></h2>
+            <p id="activeUserLabel">guest's records</p>
+          </div>
+        </div>
+        <div class="progress-card">
+          <p class="label">Easy</p>
+          <h2><span id="easySolved">0</span>/<span id="easyTotal">0</span></h2>
+        </div>
+        <div class="progress-card">
+          <p class="label">Medium</p>
+          <h2><span id="mediumSolved">0</span>/<span id="mediumTotal">0</span></h2>
+        </div>
+        <div class="progress-card">
+          <p class="label">Hard</p>
+          <h2><span id="hardSolved">0</span>/<span id="hardTotal">0</span></h2>
+        </div>
+      </section>
+
+      <section class="toolbar reveal delay-2">
+        <div class="search-box">
+          <span>⌕</span>
+          <input id="searchInput" type="search" placeholder="Search by problem name or category" />
+        </div>
+        <select id="difficultyFilter" aria-label="Filter by difficulty">
+          <option value="all">All Difficulty</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+        <select id="statusFilter" aria-label="Filter by status">
+          <option value="all">All Status</option>
+          <option value="not-started">Not Started</option>
+          <option value="in-progress">In Progress</option>
+          <option value="solved">Solved</option>
+          <option value="review">Review</option>
+        </select>
+        <button id="expandAllBtn" class="tool-btn">Expand All</button>
+        <button id="resetBtn" class="danger-btn">Reset User</button>
+      </section>
+
+      <section class="problem-list reveal delay-3" id="problemList" aria-live="polite"></section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
